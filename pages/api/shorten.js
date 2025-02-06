@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   }
 
   // Obtiene el dominio de la aplicación desde las variables de entorno o usa localhost
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
 
   return res.status(200).json({ shortUrl: `${appUrl}/${shortCode}` });
 } 
