@@ -2,6 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 export async function getServerSideProps(context) {
   const { shortCode } = context.params;
+  console.log('Procesando redirección para shortCode:', shortCode);
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_KEY;
 
@@ -21,15 +23,16 @@ export async function getServerSideProps(context) {
     .single();
 
   if (error) {
-    console.error('Error al obtener la URL:', error);
+    console.error('Error al obtener la URL para shortCode:', shortCode, error);
+    return { notFound: true };
   }
 
-  if (error || !data) {
-    return {
-      notFound: true,
-    };
+  if (!data || !data.original_url) {
+    console.error('No se encontró la URL para shortCode:', shortCode);
+    return { notFound: true };
   }
 
+  console.log('Redirigiendo a:', data.original_url);
   return {
     redirect: {
       destination: data.original_url,
